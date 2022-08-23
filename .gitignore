@@ -1,0 +1,15 @@
+*.env
+/.cache
+/.config
+/.upm
+/venv
+.replit
+*.zip
+*.lock
+*.toml
+*.nix
+/.idea
+/__pycache__
+/Archive
+/books
+
