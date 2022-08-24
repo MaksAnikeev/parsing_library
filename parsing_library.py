@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
+from urllib.parse import urljoin
 
 
 def check_for_redirect(response):
@@ -18,6 +19,15 @@ def download_txt(response, filename, folder='books/', number=None):
         file.write(response.text)
     return os.path.join(checked_folder, f'{checked_filename}.txt')
 
+def download_image(url, filename, folder='image/'):
+    checked_filename = sanitize_filename(filename)
+    checked_folder = sanitize_filename(folder)
+    Path(checked_folder).mkdir(parents=True, exist_ok=True)
+    response = requests.get(url)
+    with open(f'{checked_folder}/{checked_filename}', 'wb') as file:
+        file.write(response.content)
+    return os.path.join(checked_folder, f'{checked_filename}')
+
 for i in range(10):
     text_url = f'https://tululu.org/txt.php?id={i+1}'
     text_response = requests.get(text_url)
@@ -30,6 +40,10 @@ for i in range(10):
         book_name = soup.find('table').find('h1').text
         title_name = book_name.split('::')[0].strip()
         download_txt(response=text_response, filename=title_name, folder='books', number=i+1)
+        image_link = soup.find(class_='bookimage').find('img')['src']
+        full_image_link = urljoin('https://tululu.org/', image_link)
+        image_name = image_link.split('/')[-1]
+        download_image(url=full_image_link, filename=image_name, folder='image/')
     except requests.TooManyRedirects:
         pass
 
