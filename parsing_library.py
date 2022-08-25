@@ -28,6 +28,26 @@ def download_image(url, filename, folder='image/'):
         file.write(response.content)
     return os.path.join(checked_folder, f'{checked_filename}')
 
+def parse_book_page(response, number):
+    soup = BeautifulSoup(response.text, 'lxml')
+    book_name = soup.find('table').find('h1').text
+    title_name = book_name.split('::')[0].strip()
+    aurhor = book_name.split('::')[1].strip()
+    print(number,' Название: ', title_name, '.', ' Автор: ', aurhor, '.', sep='')
+
+    book_genres = soup.find('span', class_='d_book').find_all('a')
+    genres = []
+    for genre in book_genres:
+        genres.append(genre.text)
+    print(genres)
+
+    comments = soup.find(class_='ow_px_td').find_all(class_='black')
+    print('Комментарии:')
+    for comment in comments:
+        print(comment.text)
+    print()
+
+
 list=[4]
 for i in range(10):
     text_url = f'https://tululu.org/txt.php?id={i+1}'
@@ -37,9 +57,9 @@ for i in range(10):
 
         title_url = f'https://tululu.org/b{i+1}/'
         title_response = requests.get(title_url)
-        soup = BeautifulSoup(title_response.text, 'lxml')
-        book_name = soup.find('table').find('h1').text
-        title_name = book_name.split('::')[0].strip()
+
+        parse_book_page(response=title_response, number=i+1)
+
         # download_txt(response=text_response, filename=title_name, folder='books', number=i+1)
 
         # image_link = soup.find(class_='bookimage').find('img')['src']
@@ -52,16 +72,6 @@ for i in range(10):
         # for comment in comments:
         #     print(comment.text)
         # print()
-
-        print(title_name)
-        book_genres = soup.find('span', class_='d_book').find_all('a')
-        genres = []
-        for genre in book_genres:
-            genres.append(genre.text)
-        print(genres, '\n')
-
-
-
 
     except requests.TooManyRedirects:
         pass
