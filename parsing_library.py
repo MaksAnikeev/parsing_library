@@ -47,11 +47,20 @@ for i in range(10):
         # image_name = image_link.split('/')[-1]
         # download_image(url=full_image_link, filename=image_name, folder='image/')
 
+        # print(title_name)
+        # comments = soup.find(class_='ow_px_td').find_all(class_='black')
+        # for comment in comments:
+        #     print(comment.text)
+        # print()
+
         print(title_name)
-        comments = soup.find(class_='ow_px_td').find_all(class_='black')
-        for comment in comments:
-            print(comment.text)
-        print()
+        book_genres = soup.find('span', class_='d_book').find_all('a')
+        genres = []
+        for genre in book_genres:
+            genres.append(genre.text)
+        print(genres, '\n')
+
+
 
 
     except requests.TooManyRedirects:
