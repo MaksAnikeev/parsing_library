@@ -28,6 +28,7 @@ def download_image(url, filename, folder='image/'):
         file.write(response.content)
     return os.path.join(checked_folder, f'{checked_filename}')
 
+list=[4]
 for i in range(10):
     text_url = f'https://tululu.org/txt.php?id={i+1}'
     text_response = requests.get(text_url)
@@ -39,11 +40,20 @@ for i in range(10):
         soup = BeautifulSoup(title_response.text, 'lxml')
         book_name = soup.find('table').find('h1').text
         title_name = book_name.split('::')[0].strip()
-        download_txt(response=text_response, filename=title_name, folder='books', number=i+1)
-        image_link = soup.find(class_='bookimage').find('img')['src']
-        full_image_link = urljoin('https://tululu.org/', image_link)
-        image_name = image_link.split('/')[-1]
-        download_image(url=full_image_link, filename=image_name, folder='image/')
+        # download_txt(response=text_response, filename=title_name, folder='books', number=i+1)
+
+        # image_link = soup.find(class_='bookimage').find('img')['src']
+        # full_image_link = urljoin('https://tululu.org/', image_link)
+        # image_name = image_link.split('/')[-1]
+        # download_image(url=full_image_link, filename=image_name, folder='image/')
+
+        print(title_name)
+        comments = soup.find(class_='ow_px_td').find_all(class_='black')
+        for comment in comments:
+            print(comment.text)
+        print()
+
+
     except requests.TooManyRedirects:
         pass
 
