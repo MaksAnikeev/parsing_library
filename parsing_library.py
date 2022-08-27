@@ -30,17 +30,17 @@ def parse_book_page(response, number):
 
 
 def parse_tululu(start_id, end_id):
-    for i in range(start_id, end_id + 1):
-        text_url = f'https://tululu.org/txt.php?id={i}'
+    for number in range(start_id, end_id + 1):
+        text_url = f'https://tululu.org/txt.php?id={number}'
         text_response = requests.get(text_url)
         try:
             check_for_redirect(text_response)
 
-            title_url = f'https://tululu.org/b{i}/'
+            title_url = f'https://tululu.org/b{number}/'
             title_response = requests.get(title_url)
 
             parse_book_page(response=title_response,
-                            number=i)
+                            number=number)
         except requests.TooManyRedirects:
             pass
 
