@@ -43,6 +43,12 @@ def parse_tululu(start_id, end_id):
             parse_book_page(response=title_response,
                             number=number)
         except requests.TooManyRedirects:
+            print(f'Oops. Книги под номером {number} не существует')
+            pass
+        except requests.exceptions.HTTPError as err:
+            code = err.response.status_code
+            print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
+            print(f'Response is: {err.response.content}')
             pass
 
 
@@ -56,5 +62,11 @@ if __name__ == '__main__':
                         help='номер которым закончить')
     args = parser.parse_args()
 
-    parse_tululu(start_id=args.start_id,
-                 end_id=args.end_id)
+    try:
+        parse_tululu(start_id=args.start_id,
+                     end_id=args.end_id)
+    except requests.exceptions.ConnectionError:
+        print('Oops. Ошибка соединения. Проверьте интернет связь')
+
+
+
