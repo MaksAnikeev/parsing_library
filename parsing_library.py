@@ -17,9 +17,7 @@ def parse_book_page(response, number):
     print(number, ' Название: ', title_name.strip(), '.', ' Автор: ', aurhor.strip(), '.', sep='')
 
     book_genres = soup.find('span', class_='d_book').find_all('a')
-    genres = []
-    for genre in book_genres:
-        genres.append(genre.text)
+    genres = [genre.text for genre in book_genres]
     print(genres)
 
     comments = soup.find(class_='ow_px_td').find_all(class_='black')
