@@ -56,13 +56,20 @@ def download_books(folder):
         books_range = input('Введите номера книги c которого начать и которым закончить скачивание, через запятую: ')
         start, stop = books_range.split(',')
         for number in range(int(start), int(stop)+1):
-            text_url = f'https://tululu.org/txt.php?id={number}'
-            text_response = requests.get(text_url)
             try:
+                text_url = f'https://tululu.org/txt.php?id={number}'
+                text_response = requests.get(text_url)
                 check_for_redirect(text_response)
                 download_book(folder, number)
-            except:
+            except requests.TooManyRedirects:
+                print(f'Oops. Книги под номером {number} не существует')
                 pass
+            except requests.exceptions.HTTPError as err:
+                code = err.response.status_code
+                print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
+                print(f'Response is: {err.response.content}')
+                pass
+
     elif choise == 2:
         numbers = input('Введите номера через запятую: ')
         for number in numbers.split(','):
