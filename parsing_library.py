@@ -31,8 +31,9 @@ def parse_book_page(response, number):
 
 def parse_tululu(start_id, end_id):
     for number in range(start_id, end_id + 1):
-        text_url = f'https://tululu.org/txt.php?id={number}'
-        text_response = requests.get(text_url)
+        text_url = 'https://tululu.org/txt.php'
+        payload = {'id': number}
+        text_response = requests.get(text_url, params=payload)
         try:
             check_for_redirect(text_response)
 

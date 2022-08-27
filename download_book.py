@@ -42,8 +42,9 @@ def download_book(folder, number):
                    filename=title_name,
                    folder=folder)
 
-    text_url = f'https://tululu.org/txt.php?id={number}'
-    text_response = requests.get(text_url)
+    text_url = f'https://tululu.org/txt.php'
+    payload = {'id': number}
+    text_response = requests.get(text_url, params=payload)
     download_txt(response=text_response,
                  filename=title_name,
                  folder=folder)
