@@ -41,7 +41,7 @@ def download_book(folder, number):
     title_response.raise_for_status()
     soup = BeautifulSoup(title_response.text, 'lxml')
     image_link = soup.find(class_='bookimage').find('img')['src']
-    full_image_link = urljoin('https://tululu.org/', image_link)
+    full_image_link = urljoin('https://tululu.org', image_link)
     book_name = soup.find('table').find('h1').text
     title_name = book_name.split('::')[0].strip()
     download_image(url=full_image_link,
