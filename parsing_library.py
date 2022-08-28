@@ -10,46 +10,33 @@ def check_for_redirect(response):
         raise requests.TooManyRedirects
 
 
-def parse_book_page(response, number):
+def parse_book_page(response):
     soup = BeautifulSoup(response.text, 'lxml')
     book_name = soup.find('table').find('h1').text
     title_name, aurhor = book_name.split('::')
-    print(number, ' Название: ', title_name.strip(), '.', ' Автор: ', aurhor.strip(), '.', sep='')
+    title_name, aurhor = title_name.strip(), aurhor.strip()
 
     book_genres = soup.find('span', class_='d_book').find_all('a')
     genres = [genre.text for genre in book_genres]
-    print(genres)
 
-    comments = soup.find(class_='ow_px_td').find_all(class_='black')
-    print('Комментарии:')
-    for comment in comments:
-        print(comment.text)
-    print()
+    book_comments = soup.find(class_='ow_px_td').find_all(class_='black')
+    comments = [comment.text for comment in book_comments]
+
+    return title_name, aurhor, genres, comments
 
 
-def parse_tululu(start_id, end_id):
-    for number in range(start_id, end_id + 1):
-        try:
-            text_url = 'https://tululu.org/txt.php'
-            payload = {'id': number}
-            text_response = requests.get(text_url, params=payload)
-            text_response.raise_for_status()
-            check_for_redirect(text_response)
+def parse_tululu(number):
+    text_url = 'https://tululu.org/txt.php'
+    payload = {'id': number}
+    text_response = requests.get(text_url, params=payload)
+    text_response.raise_for_status()
+    check_for_redirect(text_response)
 
-            title_url = f'https://tululu.org/b{number}/'
-            title_response = requests.get(title_url)
-            title_response.raise_for_status()
+    title_url = f'https://tululu.org/b{number}/'
+    title_response = requests.get(title_url)
+    title_response.raise_for_status()
 
-            parse_book_page(response=title_response,
-                            number=number)
-        except requests.TooManyRedirects:
-            print(f'Oops. Книги под номером {number} не существует')
-            pass
-        except requests.exceptions.HTTPError as err:
-            code = err.response.status_code
-            print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
-            print(f'Response is: {err.response.content}')
-            pass
+    return title_response
 
 
 if __name__ == '__main__':
@@ -62,19 +49,28 @@ if __name__ == '__main__':
                         help='номер которым закончить')
     args = parser.parse_args()
 
-    patience = 10
-    while True:
+    for number in range(args.start_id, args.end_id + 1):
         try:
-            parse_tululu(start_id=args.start_id,
-                     end_id=args.end_id)
-            break
+            title_name, aurhor, genres, comments = parse_book_page(response=parse_tululu(number))
+            print(number, ' Название: ', title_name, '.', ' Автор: ', aurhor, '.', sep='')
+            print(genres)
+            print('Комментарии:')
+            for comment in comments:
+                print(comment)
+            print()
+
+        except requests.TooManyRedirects:
+            print(f'Oops. Книги под номером {number} не существует', '\n')
+            pass
+        except requests.exceptions.HTTPError as err:
+            code = err.response.status_code
+            print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
+            print(f'Response is: {err.response.content}', '\n')
+            pass
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             print('Oops. Ошибка соединения. Проверьте интернет связь')
-            patience -= 1
-            if not patience:
-                break
-            else:
-                time.sleep(5)
+            time.sleep(20)
+            pass
 
 
 

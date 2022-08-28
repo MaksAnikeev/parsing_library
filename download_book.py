@@ -1,13 +1,14 @@
 import argparse
 import os
 from pathlib import Path
+import time
 from urllib.parse import urljoin
-
 
 import requests
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 from parsing_library import check_for_redirect
+
 
 def download_txt(response, filename, folder='books/'):
     checked_filename = sanitize_filename(filename)
@@ -50,34 +51,6 @@ def download_book(folder, number):
                  folder=folder)
 
 
-def download_books(folder):
-    choise = int(input('Напишите 1, если вы хотите скачать книги диапозоном или 2 если по номерам: '))
-    if choise == 1:
-        books_range = input('Введите номера книги c которого начать и которым закончить скачивание, через запятую: ')
-        start, stop = books_range.split(',')
-        for number in range(int(start), int(stop)+1):
-            try:
-                text_url = f'https://tululu.org/txt.php?id={number}'
-                text_response = requests.get(text_url)
-                check_for_redirect(text_response)
-                download_book(folder, number)
-            except requests.TooManyRedirects:
-                print(f'Oops. Книги под номером {number} не существует')
-                pass
-            except requests.exceptions.HTTPError as err:
-                code = err.response.status_code
-                print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
-                print(f'Response is: {err.response.content}')
-                pass
-
-    elif choise == 2:
-        numbers = input('Введите номера через запятую: ')
-        for number in numbers.split(','):
-            download_book(folder, number=int(number))
-    else:
-        print('Вы ввели не правильную цифру')
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('folder',
@@ -86,4 +59,46 @@ if __name__ == '__main__':
                         default='books')
     args = parser.parse_args()
 
-    download_books(folder=args.folder)
+    choise = int(input('Напишите 1, если вы хотите скачать книги диапозоном или 2 если по номерам: '))
+    if choise == 1:
+        books_range = input('Введите номера книги c которого начать и которым закончить скачивание, через запятую: ')
+        start, stop = books_range.split(',')
+        for number in range(int(start), int(stop) + 1):
+            try:
+                text_url = f'https://tululu.org/txt.php?id={number}'
+                text_response = requests.get(text_url)
+                text_response.raise_for_status()
+                check_for_redirect(text_response)
+                download_book(args.folder, number)
+            except requests.TooManyRedirects:
+                print(f'Oops. Книги под номером {number} не существует')
+                pass
+            except requests.exceptions.HTTPError as err:
+                code = err.response.status_code
+                print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
+                print(f'Response is: {err.response.content}')
+                pass
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+                print('Oops. Ошибка соединения. Проверьте интернет связь')
+                time.sleep(20)
+                pass
+
+    elif choise == 2:
+        numbers = input('Введите номера через запятую: ')
+        for number in numbers.split(','):
+            try:
+                download_book(args.folder, number=int(number))
+            except requests.TooManyRedirects:
+                print(f'Oops. Книги под номером {number} не существует')
+                pass
+            except requests.exceptions.HTTPError as err:
+                code = err.response.status_code
+                print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
+                print(f'Response is: {err.response.content}')
+                pass
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+                print('Oops. Ошибка соединения. Проверьте интернет связь')
+                time.sleep(20)
+                pass
+    else:
+        print('Вы ввели не правильную цифру')
