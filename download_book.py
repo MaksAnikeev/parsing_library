@@ -34,6 +34,7 @@ def download_image(url, filename, folder='image/'):
 def download_book(folder, number):
     title_url = f'https://tululu.org/b{number}/'
     title_response = requests.get(title_url)
+    title_response.raise_for_status()
     soup = BeautifulSoup(title_response.text, 'lxml')
     image_link = soup.find(class_='bookimage').find('img')['src']
     full_image_link = urljoin('https://tululu.org/', image_link)
@@ -46,6 +47,7 @@ def download_book(folder, number):
     text_url = f'https://tululu.org/txt.php'
     payload = {'id': number}
     text_response = requests.get(text_url, params=payload)
+    text_response.raise_for_status()
     download_txt(response=text_response,
                  filename=title_name,
                  folder=folder)
