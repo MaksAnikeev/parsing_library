@@ -19,7 +19,7 @@ def download_txt(number, filename, folder='books/'):
     checked_folder = sanitize_filename(folder)
     Path(checked_folder).mkdir(parents=True,
                                exist_ok=True)
-    with open(f'{checked_folder}/{checked_filename}.txt', 'w', encoding='UTF-8') as file:
+    with open(os.path.join(checked_folder, f'{checked_filename}.txt'), 'w', encoding='UTF-8') as file:
         file.write(text_response.text)
     return os.path.join(checked_folder, f'{checked_filename}.txt')
 
@@ -30,7 +30,7 @@ def download_image(url, filename, folder='image/'):
     Path(checked_folder).mkdir(parents=True,
                                exist_ok=True)
     response = requests.get(url)
-    with open(f'{checked_folder}/{checked_filename}.jpg', 'wb') as file:
+    with open(os.path.join(checked_folder, f'{checked_filename}.jpg'), 'wb') as file:
         file.write(response.content)
     return os.path.join(checked_folder, f'{checked_filename}')
 
