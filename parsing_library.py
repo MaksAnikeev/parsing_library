@@ -12,9 +12,7 @@ def check_for_redirect(response):
 
 def parse_book_page(response):
     soup = BeautifulSoup(response.text, 'lxml')
-    book_name = soup.find('table').find('h1').text
-    title_name, aurhor = book_name.split('::')
-    title_name, aurhor = title_name.strip(), aurhor.strip()
+    title_name, aurhor = soup.find('table').find('h1').text.split('::')
 
     book_genres = soup.find('span', class_='d_book').find_all('a')
     genres = [genre.text for genre in book_genres]
@@ -22,7 +20,7 @@ def parse_book_page(response):
     book_comments = soup.find(class_='ow_px_td').find_all(class_='black')
     comments = [comment.text for comment in book_comments]
 
-    return title_name, aurhor, genres, comments
+    return title_name.strip(), aurhor.strip(), genres, comments
 
 
 def parse_tululu(number):
