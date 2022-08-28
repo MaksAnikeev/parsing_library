@@ -33,6 +33,7 @@ def parse_tululu(number):
     title_url = f'https://tululu.org/b{number}/'
     title_response = requests.get(title_url)
     title_response.raise_for_status()
+    check_for_redirect(title_response)
 
     return title_response
 
