@@ -10,13 +10,17 @@ from pathvalidate import sanitize_filename
 from parsing_library import check_for_redirect
 
 
-def download_txt(response, filename, folder='books/'):
+def download_txt(number, filename, folder='books/'):
+    text_url = f'https://tululu.org/txt.php'
+    payload = {'id': number}
+    text_response = requests.get(text_url, params=payload)
+    text_response.raise_for_status()
     checked_filename = sanitize_filename(filename)
     checked_folder = sanitize_filename(folder)
     Path(checked_folder).mkdir(parents=True,
                                exist_ok=True)
     with open(f'{checked_folder}/{checked_filename}.txt', 'w', encoding='UTF-8') as file:
-        file.write(response.text)
+        file.write(text_response.text)
     return os.path.join(checked_folder, f'{checked_filename}.txt')
 
 
@@ -44,11 +48,7 @@ def download_book(folder, number):
                    filename=title_name,
                    folder=folder)
 
-    text_url = f'https://tululu.org/txt.php'
-    payload = {'id': number}
-    text_response = requests.get(text_url, params=payload)
-    text_response.raise_for_status()
-    download_txt(response=text_response,
+    download_txt(number=number,
                  filename=title_name,
                  folder=folder)
 
