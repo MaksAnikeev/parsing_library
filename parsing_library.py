@@ -30,12 +30,12 @@ def parse_tululu(number):
     text_response.raise_for_status()
     check_for_redirect(text_response)
 
-    title_url = f'https://tululu.org/b{number}/'
-    title_response = requests.get(title_url)
-    title_response.raise_for_status()
-    check_for_redirect(title_response)
+    book_url = f'https://tululu.org/b{number}/'
+    book_response = requests.get(book_url)
+    book_response.raise_for_status()
+    check_for_redirect(book_response)
 
-    return title_response
+    return book_response
 
 
 if __name__ == '__main__':

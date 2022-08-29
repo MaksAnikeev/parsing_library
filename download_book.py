@@ -36,10 +36,10 @@ def download_image(url, filename, folder='image/'):
 
 
 def download_book(folder, number):
-    title_url = f'https://tululu.org/b{number}/'
-    title_response = requests.get(title_url)
-    title_response.raise_for_status()
-    soup = BeautifulSoup(title_response.text, 'lxml')
+    book_url = f'https://tululu.org/b{number}/'
+    book_response = requests.get(book_url)
+    book_response.raise_for_status()
+    soup = BeautifulSoup(book_response.text, 'lxml')
     image_link = soup.find(class_='bookimage').find('img')['src']
     full_image_link = urljoin('https://tululu.org', image_link)
     book_name = soup.find('table').find('h1').text
