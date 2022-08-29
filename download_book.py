@@ -17,9 +17,10 @@ def download_txt(number, filename, folder='books/'):
     checked_folder = sanitize_filename(folder)
     Path(checked_folder).mkdir(parents=True,
                                exist_ok=True)
-    with open(os.path.join(checked_folder, f'{checked_filename}.txt'), 'w', encoding='UTF-8') as file:
+    file_path = os.path.join(checked_folder, f'{checked_filename}.txt')
+    with open(file_path, 'w', encoding='UTF-8') as file:
         file.write(text_response.text)
-    return os.path.join(checked_folder, f'{checked_filename}.txt')
+    return file_path
 
 
 def download_image(url, filename, folder='image/'):
@@ -28,9 +29,10 @@ def download_image(url, filename, folder='image/'):
     Path(checked_folder).mkdir(parents=True,
                                exist_ok=True)
     response = requests.get(url)
-    with open(os.path.join(checked_folder, f'{checked_filename}.jpg'), 'wb') as file:
+    file_path = os.path.join(checked_folder, f'{checked_filename}.jpg')
+    with open(file_path, 'wb') as file:
         file.write(response.content)
-    return os.path.join(checked_folder, f'{checked_filename}')
+    return file_path
 
 
 if __name__ == '__main__':
@@ -52,8 +54,8 @@ if __name__ == '__main__':
                 text_response.raise_for_status()
                 check_for_redirect(text_response)
 
-                # book_url = f'https://tululu.org/b{number}/'
-                book_url = 'https://httpstat.us/405'
+                book_url = f'https://tululu.org/b{number}/'
+                # book_url = 'https://httpstat.us/405'
                 book_response = requests.get(book_url)
                 book_response.raise_for_status()
                 check_for_redirect(book_response)
