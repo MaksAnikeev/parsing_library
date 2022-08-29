@@ -74,16 +74,13 @@ if __name__ == '__main__':
                 download_book(args.folder, number)
             except requests.TooManyRedirects:
                 print(f'Oops. Книги под номером {number} не существует')
-                pass
             except requests.exceptions.HTTPError as err:
                 code = err.response.status_code
                 print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
                 print(f'Response is: {err.response.content}')
-                pass
             except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
                 print('Oops. Ошибка соединения. Проверьте интернет связь')
                 time.sleep(20)
-                pass
 
     elif choise == 2:
         numbers = input('Введите номера через запятую: ')
@@ -92,15 +89,12 @@ if __name__ == '__main__':
                 download_book(args.folder, number=int(number))
             except requests.TooManyRedirects:
                 print(f'Oops. Книги под номером {number} не существует')
-                pass
             except requests.exceptions.HTTPError as err:
                 code = err.response.status_code
                 print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
                 print(f'Response is: {err.response.content}')
-                pass
             except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
                 print('Oops. Ошибка соединения. Проверьте интернет связь')
                 time.sleep(20)
-                pass
     else:
         print('Вы ввели не правильную цифру')
