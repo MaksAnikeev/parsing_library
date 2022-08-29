@@ -60,16 +60,13 @@ if __name__ == '__main__':
 
         except requests.TooManyRedirects:
             print(f'Oops. Книги под номером {number} не существует', '\n')
-            pass
         except requests.exceptions.HTTPError as err:
             code = err.response.status_code
             print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
             print(f'Response is: {err.response.content}', '\n')
-            pass
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             print('Oops. Ошибка соединения. Проверьте интернет связь')
             time.sleep(20)
-            pass
 
 
 
