@@ -11,7 +11,7 @@ def check_for_redirect(response):
         raise requests.TooManyRedirects
 
 
-def parse_book_page(response):
+def parse_book_page(response, book_url):
     soup = BeautifulSoup(response.text, 'lxml')
     title_name, aurhor = soup.find('table').find('h1').text.split('::')
 
@@ -22,25 +22,9 @@ def parse_book_page(response):
     comments = [comment.text for comment in book_comments]
 
     image_link = soup.find(class_='bookimage').find('img')['src']
-    full_image_link = urljoin('https://tululu.org', image_link)
+    full_image_link = urljoin(book_url, image_link)
 
     return title_name.strip(), aurhor.strip(), genres, comments, full_image_link
-
-
-def parse_tululu(number):
-    text_url = 'https://tululu.org/txt.php'
-    payload = {'id': number}
-    text_response = requests.get(text_url, params=payload)
-    text_response.raise_for_status()
-    check_for_redirect(text_response)
-
-    book_url = f'https://tululu.org/b{number}/'
-    # book_url = 'https://httpstat.us/405'
-    book_response = requests.get(book_url)
-    book_response.raise_for_status()
-    check_for_redirect(book_response)
-
-    return book_response
 
 
 if __name__ == '__main__':
@@ -55,7 +39,19 @@ if __name__ == '__main__':
 
     for number in range(args.start_id, args.end_id + 1):
         try:
-            title_name, aurhor, genres, comments, full_image_link = parse_book_page(response=parse_tululu(number))
+            text_url = 'https://tululu.org/txt.php'
+            payload = {'id': number}
+            text_response = requests.get(text_url, params=payload)
+            text_response.raise_for_status()
+            check_for_redirect(text_response)
+
+            book_url = f'https://tululu.org/b{number}/'
+            # book_url = 'https://httpstat.us/405'
+            book_response = requests.get(book_url)
+            book_response.raise_for_status()
+            check_for_redirect(book_response)
+            title_name, aurhor, genres, comments, full_image_link = parse_book_page(response=book_response,
+                                                                                    book_url=book_url)
             print(number, ' Название: ', title_name, '.', ' Автор: ', aurhor, '.', sep='')
             print(genres)
             print('Комментарии:')
