@@ -3,6 +3,7 @@ import time
 
 import requests
 from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 
 
 def check_for_redirect(response):
@@ -20,7 +21,10 @@ def parse_book_page(response):
     book_comments = soup.find(class_='ow_px_td').find_all(class_='black')
     comments = [comment.text for comment in book_comments]
 
-    return title_name.strip(), aurhor.strip(), genres, comments
+    image_link = soup.find(class_='bookimage').find('img')['src']
+    full_image_link = urljoin('https://tululu.org', image_link)
+
+    return title_name.strip(), aurhor.strip(), genres, comments, full_image_link
 
 
 def parse_tululu(number):
@@ -31,6 +35,7 @@ def parse_tululu(number):
     check_for_redirect(text_response)
 
     book_url = f'https://tululu.org/b{number}/'
+    # book_url = 'https://httpstat.us/405'
     book_response = requests.get(book_url)
     book_response.raise_for_status()
     check_for_redirect(book_response)
@@ -50,7 +55,7 @@ if __name__ == '__main__':
 
     for number in range(args.start_id, args.end_id + 1):
         try:
-            title_name, aurhor, genres, comments = parse_book_page(response=parse_tululu(number))
+            title_name, aurhor, genres, comments, full_image_link = parse_book_page(response=parse_tululu(number))
             print(number, ' Название: ', title_name, '.', ' Автор: ', aurhor, '.', sep='')
             print(genres)
             print('Комментарии:')

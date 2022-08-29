@@ -2,12 +2,10 @@ import argparse
 import os
 from pathlib import Path
 import time
-from urllib.parse import urljoin
 
 import requests
-from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
-from parsing_library import check_for_redirect
+from parsing_library import check_for_redirect, parse_book_page
 
 
 def download_txt(number, filename, folder='books/'):
@@ -35,24 +33,6 @@ def download_image(url, filename, folder='image/'):
     return os.path.join(checked_folder, f'{checked_filename}')
 
 
-def download_book(folder, number):
-    book_url = f'https://tululu.org/b{number}/'
-    book_response = requests.get(book_url)
-    book_response.raise_for_status()
-    soup = BeautifulSoup(book_response.text, 'lxml')
-    image_link = soup.find(class_='bookimage').find('img')['src']
-    full_image_link = urljoin('https://tululu.org', image_link)
-    book_name = soup.find('table').find('h1').text
-    title_name = book_name.split('::')[0].strip()
-    download_image(url=full_image_link,
-                   filename=title_name,
-                   folder=folder)
-
-    download_txt(number=number,
-                 filename=title_name,
-                 folder=folder)
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('folder',
@@ -71,7 +51,21 @@ if __name__ == '__main__':
                 text_response = requests.get(text_url)
                 text_response.raise_for_status()
                 check_for_redirect(text_response)
-                download_book(args.folder, number)
+
+                # book_url = f'https://tululu.org/b{number}/'
+                book_url = 'https://httpstat.us/405'
+                book_response = requests.get(book_url)
+                book_response.raise_for_status()
+                check_for_redirect(book_response)
+
+                title_name, aurhor, genres, comments, full_image_link = parse_book_page(response=book_response)
+                download_image(url=full_image_link,
+                               filename=title_name,
+                               folder=args.folder)
+
+                download_txt(number=number,
+                             filename=title_name,
+                             folder=args.folder)
             except requests.TooManyRedirects:
                 print(f'Oops. Книги под номером {number} не существует')
             except requests.exceptions.HTTPError as err:
@@ -86,12 +80,24 @@ if __name__ == '__main__':
         numbers = input('Введите номера через запятую: ')
         for number in numbers.split(','):
             try:
-                download_book(args.folder, number=int(number))
+                book_url = f'https://tululu.org/b{int(number)}/'
+                book_response = requests.get(book_url)
+                book_response.raise_for_status()
+                check_for_redirect(book_response)
+
+                title_name, aurhor, genres, comments, full_image_link = parse_book_page(response=book_response)
+                download_image(url=full_image_link,
+                               filename=title_name,
+                               folder=args.folder)
+
+                download_txt(number=number,
+                             filename=title_name,
+                             folder=args.folder)
             except requests.TooManyRedirects:
-                print(f'Oops. Книги под номером {number} не существует')
+                print(f'Oops. Книги под номером {int(number)} не существует')
             except requests.exceptions.HTTPError as err:
                 code = err.response.status_code
-                print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
+                print(f'Oops. При поиски книги номер {int(number)} возникла ошибка {code}')
                 print(f'Response is: {err.response.content}')
             except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
                 print('Oops. Ошибка соединения. Проверьте интернет связь')
