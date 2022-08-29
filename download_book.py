@@ -45,7 +45,8 @@ if __name__ == '__main__':
 
     choise = int(input('Напишите 1, если вы хотите скачать книги диапозоном или 2 если по номерам: '))
     if choise == 1:
-        books_range_input = input('Введите номера книги c которого начать и которым закончить скачивание, через запятую: ')
+        books_range_input = input(
+            'Введите номера книги c которого начать и которым закончить скачивание, через запятую: ')
         start, stop = books_range_input.split(',')
         books_range = [book for book in range(int(start), int(stop) + 1)]
     elif choise == 2:
@@ -56,13 +57,7 @@ if __name__ == '__main__':
 
     for number in books_range:
         try:
-            text_url = f'https://tululu.org/txt.php?id={int(number)}'
-            text_response = requests.get(text_url)
-            text_response.raise_for_status()
-            check_for_redirect(text_response)
-
             book_url = f'https://tululu.org/b{int(number)}/'
-            # book_url = 'https://httpstat.us/405'
             book_response = requests.get(book_url)
             book_response.raise_for_status()
             check_for_redirect(book_response)

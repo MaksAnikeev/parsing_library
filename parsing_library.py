@@ -46,7 +46,6 @@ if __name__ == '__main__':
             check_for_redirect(text_response)
 
             book_url = f'https://tululu.org/b{number}/'
-            # book_url = 'https://httpstat.us/405'
             book_response = requests.get(book_url)
             book_response.raise_for_status()
             check_for_redirect(book_response)
@@ -68,9 +67,3 @@ if __name__ == '__main__':
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             print('Oops. Ошибка соединения. Проверьте интернет связь')
             time.sleep(20)
-
-
-
-
-
-
