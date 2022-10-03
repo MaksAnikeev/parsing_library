@@ -29,10 +29,12 @@ if __name__ == '__main__':
     #                     help='номер которым закончить')
     # args = parser.parse_args()
 
-    category_url = 'https://tululu.org/l55/'
-    category_response = requests.get(category_url)
-    category_response.raise_for_status()
-    books_range = parse_category_page(category_response)
-    for number in books_range:
-        book_url = f'https://tululu.org/b{int(number)}/'
-        print(book_url)
+    for number in range(10):
+        category_url = f'https://tululu.org/l55/{number}/'
+        category_response = requests.get(category_url)
+        category_response.raise_for_status()
+        books_range = parse_category_page(category_response)
+        for number in books_range:
+            book_url = f'https://tululu.org/b{int(number)}/'
+            print(book_url)
+
