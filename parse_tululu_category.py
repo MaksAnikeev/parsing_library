@@ -32,4 +32,7 @@ if __name__ == '__main__':
     category_url = 'https://tululu.org/l55/'
     category_response = requests.get(category_url)
     category_response.raise_for_status()
-    print(parse_category_page(category_response))
+    books_range = parse_category_page(category_response)
+    for number in books_range:
+        book_url = f'https://tululu.org/b{int(number)}/'
+        print(book_url)

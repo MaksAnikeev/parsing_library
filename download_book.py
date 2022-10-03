@@ -4,8 +4,10 @@ from pathlib import Path
 import time
 
 import requests
+from textwrap import dedent
 from pathvalidate import sanitize_filename
 from parsing_library import check_for_redirect, parse_book_page
+from parse_tululu_category import parse_category_page
 
 
 def download_txt(number, filename, folder='books/'):
@@ -43,7 +45,11 @@ if __name__ == '__main__':
                         default='books')
     args = parser.parse_args()
 
-    choise = int(input('Напишите 1, если вы хотите скачать книги диапозоном или 2 если по номерам: '))
+    choise = int(input('''Напишите
+    1 - если вы хотите скачать книги диапозоном
+    2 - если вы хотите скачать книги по номерам
+    3 - если вы хотите скачать все книги с категории
+    : '''))
     if choise == 1:
         books_range_input = input(
             'Введите номера книги c которого начать и которым закончить скачивание, через запятую: ')
@@ -52,6 +58,13 @@ if __name__ == '__main__':
     elif choise == 2:
         numbers = input('Введите номера через запятую: ')
         books_range = numbers.split(',')
+    elif choise == 3:
+        category_url = input('''Введите url адрес сайта с категорией. Пример - https://tululu.org/l55/
+        : ''')
+        print('Загружаем книги с выбранной категории. Подождите.')
+        category_response = requests.get(category_url)
+        category_response.raise_for_status()
+        books_range = parse_category_page(category_response)
     else:
         print('Вы ввели не правильную цифру')
 
