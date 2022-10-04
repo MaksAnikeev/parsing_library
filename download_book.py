@@ -2,9 +2,9 @@ import argparse
 import os
 from pathlib import Path
 import time
+import json
 
 import requests
-from textwrap import dedent
 from pathvalidate import sanitize_filename
 from parsing_library import check_for_redirect, parse_book_page
 from parse_tululu_category import parse_category_page
@@ -72,6 +72,7 @@ if __name__ == '__main__':
     else:
         print('Вы ввели не правильную цифру')
 
+    books_json = []
     for number in books_range:
         try:
             book_url = f'https://tululu.org/b{int(number)}/'
@@ -79,8 +80,18 @@ if __name__ == '__main__':
             book_response.raise_for_status()
             check_for_redirect(book_response)
 
-            title_name, aurhor, genres, comments, full_image_link = parse_book_page(response=book_response,
+            title_name, author, genres, comments, full_image_link = parse_book_page(response=book_response,
                                                                                     book_url=book_url)
+            book_params = {
+                'title': title_name,
+                'author': author,
+                'img_scr': f'{args.folder}/{title_name}.jpg',
+                'book_path': f'{args.folder}/{title_name}.txt',
+                'comments': comments,
+                'genres': genres
+            }
+            books_json.append(book_params)
+
             download_image(url=full_image_link,
                            filename=title_name,
                            folder=args.folder)
@@ -97,3 +108,6 @@ if __name__ == '__main__':
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             print('Oops. Ошибка соединения. Проверьте интернет связь')
             time.sleep(20)
+
+    with open('books_json.json', 'w', encoding='utf8') as json_file:
+        json.dump(books_json, json_file, ensure_ascii=False)

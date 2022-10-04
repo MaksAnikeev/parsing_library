@@ -4,6 +4,7 @@
 /.upm
 /venv
 .replit
+*.json
 *.zip
 *.lock
 *.toml

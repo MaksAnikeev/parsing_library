@@ -13,7 +13,7 @@ def check_for_redirect(response):
 
 def parse_book_page(response, book_url):
     soup = BeautifulSoup(response.text, 'lxml')
-    title_name, aurhor = soup.find('table').find('h1').text.split('::')
+    title_name, author = soup.find('table').find('h1').text.split('::')
 
     book_genres = soup.find('span', class_='d_book').find_all('a')
     genres = [genre.text for genre in book_genres]
@@ -24,7 +24,7 @@ def parse_book_page(response, book_url):
     image_link = soup.find(class_='bookimage').find('img')['src']
     full_image_link = urljoin(book_url, image_link)
 
-    return title_name.strip(), aurhor.strip(), genres, comments, full_image_link
+    return title_name.strip(), author.strip(), genres, comments, full_image_link
 
 
 if __name__ == '__main__':
@@ -49,9 +49,9 @@ if __name__ == '__main__':
             book_response = requests.get(book_url)
             book_response.raise_for_status()
             check_for_redirect(book_response)
-            title_name, aurhor, genres, comments, full_image_link = parse_book_page(response=book_response,
+            title_name, author, genres, comments, full_image_link = parse_book_page(response=book_response,
                                                                                     book_url=book_url)
-            print(number, ' Название: ', title_name, '.', ' Автор: ', aurhor, '.', sep='')
+            print(number, ' Название: ', title_name, '.', ' Автор: ', author, '.', sep='')
             print(genres)
             print('Комментарии:')
             for comment in comments:
