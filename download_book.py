@@ -43,6 +43,25 @@ if __name__ == '__main__':
                         nargs='?',
                         help='папка для скачивания книг, по умолчанию books',
                         default='books')
+    parser.add_argument('--dest_folder',
+                        nargs='?',
+                        help='путь к каталогу с результатами парсинга: картинкам, книгам, JSON',
+                        default='D:/Программирование/Devman/Уроки/14 неделя/parsing_library')
+    parser.add_argument('--skip_imgs',
+                        nargs='?',
+                        help='не скачивать картинки',
+                        type=bool,
+                        default=False)
+    parser.add_argument('--skip_txt',
+                        nargs='?',
+                        help='не скачивать книги',
+                        type=bool,
+                        default=False)
+    parser.add_argument('--json_path',
+                        nargs='?',
+                        help='путь к *.json файлу с результатами',
+                        default='D:/Программирование/Devman/Уроки/14 неделя/parsing_library/books_json.json')
+
     args = parser.parse_args()
 
     choise = int(input('''Напишите
