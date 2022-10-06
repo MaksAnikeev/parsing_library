@@ -48,7 +48,7 @@ if __name__ == '__main__':
     choise = int(input('''Напишите
     1 - если вы хотите скачать книги диапозоном
     2 - если вы хотите скачать книги по номерам
-    3 - если вы хотите скачать все книги с категории
+    3 - если вы хотите скачать книги с категории
     : '''))
     if choise == 1:
         books_range_input = input(
@@ -61,10 +61,11 @@ if __name__ == '__main__':
     elif choise == 3:
         category_url = input('''Введите url адрес сайта с категорией. Пример - https://tululu.org/l55/
         : ''')
-        pages_quantity = int(input('Введите количество страниц для скачивания: '))
+        page_start = int(input('Введите номер страницы, с которой начать скачивание: '))
+        page_finish = int(input('Введите номер страницы, которой закончить скачивание: '))
         print('Загружаем книги с выбранной категории. Подождите.')
         books_range = []
-        for number in range(pages_quantity+1):
+        for number in range(page_start, page_finish+1):
             category_response = requests.get(f'{category_url}{number}/')
             category_response.raise_for_status()
             one_page_books_range = parse_category_page(category_response)
