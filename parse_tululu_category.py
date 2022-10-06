@@ -1,10 +1,6 @@
-import argparse
-import time
-
 import requests
 from bs4 import BeautifulSoup
 import re
-from urllib.parse import urljoin
 
 
 def parse_category_page(response):
@@ -20,15 +16,6 @@ def parse_category_page(response):
 
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('start_id',
-    #                     type=int,
-    #                     help='номер с которого начать')
-    # parser.add_argument('end_id',
-    #                     type=int,
-    #                     help='номер которым закончить')
-    # args = parser.parse_args()
-
     for number in range(3):
         category_url = f'https://tululu.org/l55/{number}/'
         category_response = requests.get(category_url)
@@ -37,4 +24,3 @@ if __name__ == '__main__':
         for number in books_range:
             book_url = f'https://tululu.org/b{int(number)}/'
             print(book_url)
-
