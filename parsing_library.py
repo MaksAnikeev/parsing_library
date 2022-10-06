@@ -13,15 +13,17 @@ def check_for_redirect(response):
 
 def parse_book_page(response, book_url):
     soup = BeautifulSoup(response.text, 'lxml')
+
     title_name, author = soup.find('table').find('h1').text.split('::')
 
-    book_genres = soup.find('span', class_='d_book').find_all('a')
+    book_genres = soup.select('span.d_book a')
     genres = [genre.text for genre in book_genres]
 
-    book_comments = soup.find(class_='ow_px_td').find_all(class_='black')
+    book_comments = soup.select('.ow_px_td .black')
     comments = [comment.text for comment in book_comments]
 
-    image_link = soup.find(class_='bookimage').find('img')['src']
+    image_link_list = soup.select(".bookimage img[src]")
+    image_link = image_link_list[0]['src']
     full_image_link = urljoin(book_url, image_link)
 
     return title_name.strip(), author.strip(), genres, comments, full_image_link

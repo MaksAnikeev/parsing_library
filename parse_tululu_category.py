@@ -9,8 +9,8 @@ from urllib.parse import urljoin
 
 def parse_category_page(response):
     soup = BeautifulSoup(response.text, 'lxml')
-    books_id=[]
-    books= soup.find_all(class_='d_book')
+    books_id = []
+    books = soup.find_all(class_='d_book')
     for book in books:
         book_str_id = book.find('a')['href']
         book_id = int(re.findall(r'-?\d+\.?\d*', book_str_id)[0])
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     #                     help='номер которым закончить')
     # args = parser.parse_args()
 
-    for number in range(10):
+    for number in range(3):
         category_url = f'https://tululu.org/l55/{number}/'
         category_response = requests.get(category_url)
         category_response.raise_for_status()
