@@ -14,7 +14,7 @@ def check_for_redirect(response):
 def parse_book_page(response, book_url):
     soup = BeautifulSoup(response.text, 'lxml')
 
-    title_name, author = soup.find('table').find('h1').text.split('::')
+    title_name, author = soup.select('table h1')[0].text.split('::')
 
     book_genres = soup.select('span.d_book a')
     genres = [genre.text for genre in book_genres]
