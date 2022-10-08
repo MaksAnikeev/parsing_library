@@ -10,7 +10,7 @@ from parsing_library import check_for_redirect, parse_book_page
 from parse_tululu_category import parse_category_page
 
 
-def download_txt(number, filename, skip_txt, folder='books/'):
+def download_txt(number, filename, skip_txt, folder):
     if not skip_txt:
         text_url = f'https://tululu.org/txt.php'
         payload = {'id': number}
@@ -26,8 +26,7 @@ def download_txt(number, filename, skip_txt, folder='books/'):
         return file_path
 
 
-
-def download_image(url, filename, skip_imgs, folder='image/'):
+def download_image(url, filename, skip_imgs, folder):
     if not skip_imgs:
         checked_filename = sanitize_filename(filename)
         checked_folder = sanitize_filename(folder)
@@ -117,7 +116,6 @@ if __name__ == '__main__':
                 'genres': genres
             }
             books_params.append(book_params)
-
             download_image(url=full_image_link,
                            filename=title_name,
                            skip_imgs=args.skip_imgs,
