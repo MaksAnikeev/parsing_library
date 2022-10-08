@@ -46,7 +46,8 @@ if __name__ == '__main__':
     parser.add_argument('--dest_folder',
                         nargs='?',
                         help='путь к каталогу с результатами парсинга: картинкам, книгам, JSON',
-                        default='D:/Программирование/Devman/Уроки/14 неделя/parsing_library')
+                        default=os.path.join('D:', 'Программирование', 'Devman', 'Уроки',
+                                             '14 неделя', 'parsing_library'))
     parser.add_argument('--skip_imgs',
                         nargs='?',
                         help='не скачивать картинки',
@@ -60,7 +61,8 @@ if __name__ == '__main__':
     parser.add_argument('--json_path',
                         nargs='?',
                         help='путь к *.json файлу с результатами',
-                        default='D:/Программирование/Devman/Уроки/14 неделя/parsing_library/books_json.json')
+                        default=os.path.join('D:', 'Программирование', 'Devman', 'Уроки',
+                                             '14 неделя', 'parsing_library', 'books_json.json'))
 
     args = parser.parse_args()
 
@@ -105,8 +107,8 @@ if __name__ == '__main__':
             book_params = {
                 'title': title_name,
                 'author': author,
-                'img_scr': f'{args.folder}/{title_name}.jpg',
-                'book_path': f'{args.folder}/{title_name}.txt',
+                'img_scr': os.path.join(args.folder, f'{title_name}.jpg'),
+                'book_path': os.path.join(args.folder, f'{title_name}.txt'),
                 'comments': comments,
                 'genres': genres
             }
