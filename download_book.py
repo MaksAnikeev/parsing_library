@@ -89,6 +89,7 @@ if __name__ == '__main__':
         for number in range(page_start, page_finish + 1):
             category_response = requests.get(f'{category_url}{number}/')
             category_response.raise_for_status()
+            check_for_redirect(category_response)
             one_page_books_range = parse_category_page(category_response)
             books_range.extend(one_page_books_range)
     else:
