@@ -62,7 +62,7 @@ if __name__ == '__main__':
                         nargs='?',
                         help='путь к *.json файлу с результатами',
                         default=os.path.join('D:', 'Программирование', 'Devman', 'Уроки',
-                                             '14 неделя', 'parsing_library', 'books_json.json'))
+                                             '14 неделя', 'parsing_library', 'books_params.json'))
 
     args = parser.parse_args()
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     else:
         print('Вы ввели не правильную цифру')
 
-    books_json = []
+    books_params = []
     for number in books_range:
         try:
             book_url = f'https://tululu.org/b{int(number)}/'
@@ -113,7 +113,7 @@ if __name__ == '__main__':
                 'comments': comments,
                 'genres': genres
             }
-            books_json.append(book_params)
+            books_params.append(book_params)
 
             download_image(url=full_image_link,
                            filename=title_name,
@@ -132,5 +132,5 @@ if __name__ == '__main__':
             print('Oops. Ошибка соединения. Проверьте интернет связь')
             time.sleep(20)
 
-    with open('books_json.json', 'w', encoding='utf8') as json_file:
-        json.dump(books_json, json_file, ensure_ascii=False)
+    with open('books_params.json', 'w', encoding='utf8') as json_file:
+        json.dump(books_params, json_file, ensure_ascii=False)
