@@ -87,11 +87,22 @@ if __name__ == '__main__':
         print('Загружаем книги с выбранной категории. Подождите.')
         books_range = []
         for number in range(page_start, page_finish + 1):
-            category_response = requests.get(f'{category_url}{number}/')
-            category_response.raise_for_status()
-            check_for_redirect(category_response)
-            one_page_books_range = parse_category_page(category_response)
-            books_range.extend(one_page_books_range)
+            try:
+                category_response = requests.get(f'{category_url}{number}/')
+                category_response.raise_for_status()
+                check_for_redirect(category_response)
+                one_page_books_range = parse_category_page(category_response)
+                books_range.extend(one_page_books_range)
+            except requests.TooManyRedirects:
+                print(f'Oops. Книги под номером {number} не существует')
+            except requests.exceptions.HTTPError as err:
+                code = err.response.status_code
+                print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
+                print(f'Response is: {err.response.content}')
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+                print('Oops. Ошибка соединения. Проверьте интернет связь')
+                time.sleep(20)
+            
     else:
         print('Вы ввели не правильную цифру')
 
