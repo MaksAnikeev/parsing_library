@@ -10,33 +10,31 @@ from parsing_library import check_for_redirect, parse_book_page
 from parse_tululu_category import parse_category_page
 
 
-def download_txt(number, filename, skip_txt, folder):
-    if not skip_txt:
-        text_url = f'https://tululu.org/txt.php'
-        payload = {'id': number}
-        text_response = requests.get(text_url, params=payload)
-        text_response.raise_for_status()
-        checked_filename = sanitize_filename(filename)
-        checked_folder = sanitize_filename(folder)
-        Path(checked_folder).mkdir(parents=True,
-                                   exist_ok=True)
-        file_path = os.path.join(checked_folder, f'{checked_filename}.txt')
-        with open(file_path, 'w', encoding='UTF-8') as file:
-            file.write(text_response.text)
-        return file_path
+def download_txt(number, filename, folder):
+    text_url = f'https://tululu.org/txt.php'
+    payload = {'id': number}
+    text_response = requests.get(text_url, params=payload)
+    text_response.raise_for_status()
+    checked_filename = sanitize_filename(filename)
+    checked_folder = sanitize_filename(folder)
+    Path(checked_folder).mkdir(parents=True,
+                               exist_ok=True)
+    file_path = os.path.join(checked_folder, f'{checked_filename}.txt')
+    with open(file_path, 'w', encoding='UTF-8') as file:
+        file.write(text_response.text)
+    return file_path
 
 
-def download_image(url, filename, skip_imgs, folder):
-    if not skip_imgs:
-        checked_filename = sanitize_filename(filename)
-        checked_folder = sanitize_filename(folder)
-        Path(checked_folder).mkdir(parents=True,
-                                   exist_ok=True)
-        response = requests.get(url)
-        file_path = os.path.join(checked_folder, f'{checked_filename}.jpg')
-        with open(file_path, 'wb') as file:
-            file.write(response.content)
-        return file_path
+def download_image(url, filename, folder):
+    checked_filename = sanitize_filename(filename)
+    checked_folder = sanitize_filename(folder)
+    Path(checked_folder).mkdir(parents=True,
+                               exist_ok=True)
+    response = requests.get(url)
+    file_path = os.path.join(checked_folder, f'{checked_filename}.jpg')
+    with open(file_path, 'wb') as file:
+        file.write(response.content)
+    return file_path
 
 
 if __name__ == '__main__':
@@ -116,15 +114,17 @@ if __name__ == '__main__':
                 'genres': genres
             }
             books_params.append(book_params)
-            download_image(url=full_image_link,
-                           filename=title_name,
-                           skip_imgs=args.skip_imgs,
-                           folder=args.folder)
 
-            download_txt(number=number,
-                         filename=title_name,
-                         skip_txt=args.skip_txt,
-                         folder=args.folder)
+            if not args.skip_imgs:
+                download_image(url=full_image_link,
+                               filename=title_name,
+                               folder=args.folder)
+
+            if not args.skip_txt:
+                download_txt(number=number,
+                             filename=title_name,
+                             folder=args.folder)
+
         except requests.TooManyRedirects:
             print(f'Oops. Книги под номером {number} не существует')
         except requests.exceptions.HTTPError as err:
