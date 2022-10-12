@@ -144,7 +144,8 @@ if __name__ == '__main__':
             print(f'Response is: {err.response.content}')
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             print('Oops. Ошибка соединения. Проверьте интернет связь')
-            time.sleep(20)
+            time.sleep(10)
+            print('Продолжаем скачивание')
 
     with open('books_params.json', 'w', encoding='utf8') as json_file:
         json.dump(books_params, json_file, ensure_ascii=False)

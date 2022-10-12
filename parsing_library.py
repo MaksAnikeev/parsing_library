@@ -3,6 +3,7 @@ import time
 
 import requests
 from bs4 import BeautifulSoup
+from pathvalidate import sanitize_filename
 from urllib.parse import urljoin
 
 
@@ -14,7 +15,8 @@ def check_for_redirect(response):
 def parse_book_page(response, book_url):
     soup = BeautifulSoup(response.text, 'lxml')
 
-    title_name, author = soup.select('table h1')[0].text.split('::')
+    book_name, author = soup.select('table h1')[0].text.split('::')
+    title_name = sanitize_filename(book_name.replace('.', '!'))
 
     book_genres = soup.select('span.d_book a')
     genres = [genre.text for genre in book_genres]
