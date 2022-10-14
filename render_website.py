@@ -3,6 +3,7 @@ import json
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
+from more_itertools import chunked
 
 def on_reload():
     env = Environment(
@@ -16,7 +17,7 @@ def on_reload():
         books = my_file.read()
         books_params = json.loads(books)
 
-
+    books_params = list(chunked(books_params, 2))
     rendered_page = template.render(
         books_params=books_params,
     )

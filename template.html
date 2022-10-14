@@ -11,20 +11,31 @@
     <title>Book's cards</title>
   </head>
   <body>
-    {% for book in books_params%}
-    <div class="card mb-3" style="max-width: 540px;">
-      <div class="row no-gutters">
-        <div class="col-md-4">
-          <img src='{{book.img_scr}}' class="card-img" alt="Книга с названием {{book.title}}">
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <h5 class="card-title">{{book.title}}</h5>
-            <p class="card-text">{{book.author}}</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    <div class="container">
+      <div class="row">
+      {% for book_range in books_params%}
+        {% for book in book_range%}
+        <div class="col">
+        <div class="card mb-3" style="max-width: 540px;">
+          <div class="row no-gutters">
+            <div class="col-md-4">
+              <img src='{{book.img_scr}}' class="card-img" alt="Книга с названием {{book.title}}">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{book.title}}</h5>
+                <p class="card-text">{{book.author}}</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
           </div>
         </div>
+        </div>
+        {% endfor %}
+        <div class="w-100"></div>
+      {% endfor %}
       </div>
     </div>
-    {% endfor %}
+  </body>
+
 
