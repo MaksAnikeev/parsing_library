@@ -43,7 +43,7 @@ if __name__ == '__main__':
                         nargs='?',
                         help='папка для скачивания книг, по умолчанию books',
                         default='books')
-    parser.add_argument('--dest_folder',
+    parser.add_argument('--desk_folder',
                         nargs='?',
                         help='путь к каталогу с результатами парсинга: картинкам, книгам, JSON',
                         default=os.path.join('D:', 'Программирование', 'Devman', 'Уроки',
@@ -122,7 +122,8 @@ if __name__ == '__main__':
                 'img_scr': os.path.join(args.folder, f'{title_name}.jpg'),
                 'book_path': os.path.join(args.folder, f'{title_name}.txt'),
                 'comments': comments,
-                'genres': genres
+                'genres': genres,
+                'desk_folder': args.desk_folder
             }
             books_params.append(book_params)
 
