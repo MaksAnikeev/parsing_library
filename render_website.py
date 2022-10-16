@@ -1,11 +1,11 @@
-from http.server import HTTPServer, SimpleHTTPRequestHandler
 import json
 import os
+from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
 from more_itertools import chunked
-from pathlib import Path
+
 
 def on_reload():
     env = Environment(
@@ -15,7 +15,8 @@ def on_reload():
 
     template = env.get_template('template.html')
 
-    Path('pages').mkdir(parents=True, exist_ok=True)
+    Path('pages').mkdir(parents=True,
+                        exist_ok=True)
 
     with open("books_params.json", "r", encoding="utf-8") as my_file:
         books = my_file.read()
@@ -27,20 +28,16 @@ def on_reload():
         book_params = list(chunked(book_params, 2))
         rendered_page = template.render(
             books_params=book_params,
-            page_number=number+1,
+            page_number=number + 1,
             pages=len(books_params)
         )
-        with open(os.path.join('pages', f'index{number+1}.html'), 'w', encoding="utf8") as file:
+        with open(os.path.join('pages', f'index{number + 1}.html'), 'w', encoding="utf8") as file:
             file.write(rendered_page)
 
 
 on_reload()
 
-
 server = Server()
 server.watch('template.html', on_reload)
 server.watch('books_params.json', on_reload)
 server.serve(root='.')
-
-# server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-# server.serve_forever()

@@ -1,13 +1,14 @@
 import argparse
-import os
-from pathlib import Path
-import time
 import json
+import os
+import time
+from pathlib import Path
 
 import requests
 from pathvalidate import sanitize_filename
-from parsing_library import check_for_redirect, parse_book_page
+
 from parse_tululu_category import parse_category_page
+from parsing_library import check_for_redirect, parse_book_page
 
 
 def download_txt(number, filename, folder):
@@ -102,7 +103,7 @@ if __name__ == '__main__':
             except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
                 print('Oops. Ошибка соединения. Проверьте интернет связь')
                 time.sleep(20)
-            
+
     else:
         print('Вы ввели не правильную цифру')
 
