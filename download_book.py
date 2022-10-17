@@ -20,7 +20,7 @@ def download_txt(number, filename, folder):
     checked_folder = sanitize_filename(folder)
     Path(checked_folder).mkdir(parents=True,
                                exist_ok=True)
-    file_path = os.path.join(checked_folder, f'{checked_filename}.txt')
+    file_path = os.path.join(checked_folder, f'{checked_filename}.json')
     with open(file_path, 'w', encoding='UTF-8') as file:
         file.write(text_response.text)
     return file_path
@@ -121,7 +121,7 @@ if __name__ == '__main__':
                 'title': title_name,
                 'author': author,
                 'img_scr': os.path.join(args.folder, f'{title_name}.jpg'),
-                'book_path': os.path.join(args.folder, f'{title_name}.txt'),
+                'book_path': os.path.join(args.folder, f'{title_name}.json'),
                 'comments': comments,
                 'genres': genres,
                 'desk_folder': args.desk_folder
