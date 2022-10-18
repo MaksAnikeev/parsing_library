@@ -7,6 +7,10 @@
 
 http://127.0.0.1:5500/pages/index1.html
 
+образец сайта можно посмотреть на GitHub Pages
+
+https://maksanikeev.github.io/parsing_library/pages/index1.html
+
 ## Запуск
 
 - Установите зависимости командой 
