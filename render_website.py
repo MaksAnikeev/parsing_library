@@ -24,15 +24,15 @@ def on_reload():
     quantity_books_in_page = 10
     books_params = list(chunked(books_params, quantity_books_in_page))
 
-    for number, book_params in enumerate(books_params):
+    for number, book_params in enumerate(books_params, start=1):
         quantity_books_in_raw = 2
         book_params = list(chunked(book_params, quantity_books_in_raw))
         rendered_page = template.render(
             books_params=book_params,
-            page_number=number + 1,
+            page_number=number,
             pages=len(books_params)
         )
-        with open(os.path.join('pages', f'index{number + 1}.html'), 'w', encoding="utf8") as file:
+        with open(os.path.join('pages', f'index{number}.html'), 'w', encoding="utf8") as file:
             file.write(rendered_page)
 
 
