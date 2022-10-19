@@ -19,8 +19,7 @@ def on_reload():
                         exist_ok=True)
 
     with open("books_params.json", "r", encoding="utf-8") as my_file:
-        books = my_file.read()
-        books_params = json.loads(books)
+        books_params = json.load(my_file)
 
     books_params = list(chunked(books_params, 10))
 
