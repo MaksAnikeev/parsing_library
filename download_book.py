@@ -16,7 +16,6 @@ def download_txt(number, filename, folder):
     payload = {'id': number}
     text_response = requests.get(text_url, params=payload)
     text_response.raise_for_status()
-    check_for_redirect(text_response)
     checked_filename = sanitize_filename(filename)
     checked_folder = sanitize_filename(folder)
     Path(checked_folder).mkdir(parents=True,
@@ -115,6 +114,11 @@ if __name__ == '__main__':
             book_response = requests.get(book_url)
             book_response.raise_for_status()
             check_for_redirect(book_response)
+
+            text_url = f'https://tululu.org/txt.php'
+            payload = {'id': number}
+            text_response = requests.get(text_url, params=payload)
+            check_for_redirect(text_response)
 
             title_name, author, genres, comments, full_image_link = parse_book_page(response=book_response,
                                                                                     book_url=book_url)
