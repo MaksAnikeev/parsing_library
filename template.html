@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="\parsing_library\static\bootstrap.min.css">
 
-    <link type="image/x-icon" href="\parsing_library\books\иконка.png" rel="shortcut icon">
+    <link type="image/x-icon" href="\parsing_library\books\иконка.jpg" rel="shortcut icon">
 
     <title>Book's cards</title>
 </head>
@@ -46,7 +46,7 @@
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <img src='\parsing_library\{{book.img_scr|urlencode}}' class="card-img" alt="Книга с названием {{book.title|urlencode}}">
+                        <img src='\parsing_library\{{book.img_scr | urlencode}}' class="card-img" alt="Книга с названием {{book.title}}">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
@@ -59,7 +59,7 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                            <a href='\parsing_library\{{book.book_path|urlencode}}' target="_blank" rel="noopener noreferrer">Читать</a>
+                            <a href='\parsing_library\{{book.book_path | urlencode}}' target="_blank" rel="noopener noreferrer">Читать</a>
                         </div>
                     </div>
                 </div>
