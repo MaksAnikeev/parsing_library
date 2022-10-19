@@ -21,10 +21,12 @@ def on_reload():
     with open("books_params.json", "r", encoding="utf-8") as my_file:
         books_params = json.load(my_file)
 
-    books_params = list(chunked(books_params, 10))
+    quantity_books_in_page = 10
+    books_params = list(chunked(books_params, quantity_books_in_page))
 
     for number, book_params in enumerate(books_params):
-        book_params = list(chunked(book_params, 2))
+        quantity_books_in_raw = 2
+        book_params = list(chunked(book_params, quantity_books_in_raw))
         rendered_page = template.render(
             books_params=book_params,
             page_number=number + 1,
