@@ -16,6 +16,7 @@ def download_txt(number, filename, folder):
     payload = {'id': number}
     text_response = requests.get(text_url, params=payload)
     text_response.raise_for_status()
+    check_for_redirect(text_response)
     checked_filename = sanitize_filename(filename)
     checked_folder = sanitize_filename(folder)
     Path(checked_folder).mkdir(parents=True,
@@ -95,10 +96,10 @@ if __name__ == '__main__':
                 one_page_books_range = parse_category_page(category_response)
                 books_range.extend(one_page_books_range)
             except requests.TooManyRedirects:
-                print(f'Oops. Книги под номером {number} не существует')
+                print(f'Oops. Страницы под номером {number} не существует')
             except requests.exceptions.HTTPError as err:
                 code = err.response.status_code
-                print(f'Oops. При поиски книги номер {number} возникла ошибка {code}')
+                print(f'Oops. При поиски страницы номер {number} возникла ошибка {code}')
                 print(f'Response is: {err.response.content}')
             except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
                 print('Oops. Ошибка соединения. Проверьте интернет связь')
@@ -134,6 +135,10 @@ if __name__ == '__main__':
                                folder=args.folder)
 
             if not args.skip_txt:
+                book_url = f'https://tululu.org/b{int(number)}/'
+                book_response = requests.get(book_url)
+                book_response.raise_for_status()
+                check_for_redirect(book_response)
                 download_txt(number=number,
                              filename=title_name,
                              folder=args.folder)
