@@ -120,8 +120,8 @@ if __name__ == '__main__':
             book_params = {
                 'title': title_name,
                 'author': author,
-                'img_scr': os.path.join(args.folder, f'{title_name}.jpg'),
-                'book_path': os.path.join(args.folder, f'{title_name}.json'),
+                'img_scr': f'{args.folder}/{title_name}.jpg',
+                'book_path': f'{args.folder}/{title_name}.json',
                 'comments': comments,
                 'genres': genres,
                 'desk_folder': args.desk_folder
