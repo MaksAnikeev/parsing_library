@@ -35,10 +35,11 @@ def on_reload():
             file.write(rendered_page)
 
 
-on_reload()
+if __name__ == '__main__':
+    on_reload()
 
-server = Server()
-server.watch('template.html', on_reload)
-server.watch('books_params.json', on_reload)
-server.serve(root = '.')
+    server = Server()
+    server.watch('template.html', on_reload)
+    server.watch('books_params.json', on_reload)
+    server.serve(root = '.')
 
