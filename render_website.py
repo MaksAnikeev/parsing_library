@@ -30,7 +30,8 @@ def on_reload():
             books_params=book_params,
             page_number=number,
             pages=len(books_params))
-        with open(os.path.join('pages', f'index{number}.html'), 'w', encoding="utf8") as file:
+        with open(os.path.join('pages', f'index{number}.html'),
+                  'w', encoding="utf8") as file:
             file.write(rendered_page)
 
 
