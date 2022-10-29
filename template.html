@@ -46,21 +46,21 @@
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <img src='/parsing_library/{{book.img_scr | urlencode}}' class="card-img" alt="Книга с названием {{book.title}}">
+                        <img src='/parsing_library/{{book.img_scr | urlencode}}' class="card-img"
+                             alt="Книга с названием {{book.title}}">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">{{book.title}}</h5>
                             <p class="card-text">{{book.author}}</p>
                             <div class="container mb-5">
-                                <div class="row">
-                                    {% for genre in book.genres%}
-                                    <div class="col"><span class="badge badge-info">{{genre}}</span></div>
-                                    {% endfor %}
-                                </div>
+                                {% for genre in book.genres%}
+                                <h7><span class="badge badge-info">{{genre}}</span></h7>
+                                {% endfor %}
                             </div>
-                            <a href='/parsing_library/{{book.book_path | urlencode}}' target="_blank" rel="noopener noreferrer">Читать</a>
-                          </div>
+                            <a href='/parsing_library/{{book.book_path | urlencode}}' target="_blank"
+                               rel="noopener noreferrer">Читать</a>
+                        </div>
                     </div>
                 </div>
             </div>
