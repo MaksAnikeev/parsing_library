@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/parsing_library/static/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/bootstrap.min.css">
 
-    <link type="image/x-icon" href="/parsing_library/books/иконка.jpg" rel="shortcut icon">
+    <link type="image/x-icon" href="../books/иконка.jpg" rel="shortcut icon">
 
     <title>Books</title>
 </head>
@@ -46,7 +46,7 @@
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <img src='/parsing_library/{{book.img_scr | urlencode}}' class="card-img"
+                        <img src='../{{book.img_scr | urlencode}}' class="card-img"
                              alt="Книга с названием {{book.title}}">
                     </div>
                     <div class="col-md-8">
@@ -58,7 +58,7 @@
                                 <h7><span class="badge badge-info">{{genre}}</span></h7>
                                 {% endfor %}
                             </div>
-                            <a href='/parsing_library/{{book.book_path | urlencode}}' target="_blank"
+                            <a href='../{{book.book_path | urlencode}}' target="_blank"
                                rel="noopener noreferrer">Читать</a>
                         </div>
                     </div>
